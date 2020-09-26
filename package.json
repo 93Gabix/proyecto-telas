@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "description": "Programa para manejar telas",
   "main": "index.js",
-  "dependencies": {
-    "electron": "^10.1.2"
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^10.1.2",
+    "electron-reload": "^1.5.0"
   },
-  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron src/index.js"
   },
   "repository": {
     "type": "git",
