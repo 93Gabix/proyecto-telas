@@ -1,8 +1,8 @@
-const { app, BrowserWindow, Menu, ipcMain } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 
 
-const url = require('url');
-const path = require('path');
+const path = require('path')
+const url = require('url')
 
 if (process.env.NODE_ENV !== 'production') { //Para saber en que parte del desarrollo estamos
     require('electron-reload')(__dirname, {
@@ -25,9 +25,9 @@ app.on('ready', () => {
             nodeIntegration: true,
             nodeIntegrationInWorker: true
         }
-    });
+    })
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'view/index.html'), //indicar donde la ruta del archivo a cargar en esta ventana
+        pathname: path.join(__dirname, 'view/Insumos.html'), //indicar donde la ruta del archivo a cargar en esta ventana
         protocol: 'file', //Indica el protocolo
         slashes: true, //
     }))
@@ -36,62 +36,62 @@ app.on('ready', () => {
     mainWindow.on('closed', () => {
         app.quit();
     })
-
     const mainMenu = Menu.buildFromTemplate(templateMenu) //Crea un menú a partir de un arreglo que diseñemos(la navegacion)
         //Se guarda en una const, para luego aplicarselo al setApplicationMenu
     Menu.setApplicationMenu(mainMenu)
-
 })
 
 
 //se encarga de crear una nueva interfaz para crear un formulario para crear nuevo producto
-function createNewProductWindows() {
+function createInsumosWindows() {
     newProductWindow = new BrowserWindow({
-            width: 400,
-            height: 350,
-            title: 'Agregar Nuevo Producto',
-            webPreferences: {
-                nodeIntegration: true,
-                nodeIntegrationInWorker: true
-            }
-        })
-        //newProductWindow.setMenu(null); // para que no aparezca el mimso nav que la pantalla principal // Se comenta por el momento para desarrollar
-    newProductWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'view/newProduct.html'),
-        protocol: 'file',
-        slashes: true,
-    }))
-}
-
-function DeleteProductsWindows() {
-    DeleteProductWindow = new BrowserWindow({
         width: 400,
-        height: 330,
-        title: 'Eliminar Productos',
+        height: 350,
+        title: 'Agregar Nuevo Insumo',
         webPreferences: {
             nodeIntegration: true,
             nodeIntegrationInWorker: true
         }
-    });
-    //DeleteProductWindow.setMenu(null);
-    DeleteProductWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'view/list-product.html'),
-        protocol: 'file',
-        slashes: true,
-    }))
+    })
+    newProductWindow.loadURL(url.format({
+            pathname: path.join(__dirname, 'view/newinsumo.html'),
+            protocol: 'file',
+            slashes: true,
+        }))
+        // para que no aparezca el mimso nav que la pantalla principal // Se comenta por el momento para desarrollar
+        //newProductWindow.setMenu(null)
+
 }
+
+// function DeleteProductsWindows() {
+//     DeleteProductWindow = new BrowserWindow({
+//         width: 400,
+//         height: 330,
+//         title: 'Eliminar Productos',
+//         webPreferences: {
+//             nodeIntegration: true,
+//             nodeIntegrationInWorker: true
+//         }
+//     });
+//     //DeleteProductWindow.setMenu(null);
+//     DeleteProductWindow.loadURL(url.format({
+//         pathname: path.join(__dirname, 'view/list-product.html'),
+//         protocol: 'file',
+//         slashes: true,
+//     }))
+// }
 
 
 
 // Obtenemos los datos de new-product.html y los enviamos al index.html
 
 ipcMain.on('product:new', (event, newProduct) => {
-    // console.log(newProduct) podemos chequear que los valores son los correctos
-
+    //podemos chequear que los valores son los correctos en la consola del visual
+    //console.log(newProduct);
     // Se envía por mainWindow con webContents los datos obtenidos y luego cerramos la pantalla newProductWindow 
     mainWindow.webContents.send('product:new', newProduct);
     newProductWindow.close();
-});
+})
 
 
 
@@ -99,20 +99,60 @@ ipcMain.on('product:new', (event, newProduct) => {
 const templateMenu = [
 
     {
-        label: 'Telas',
+        label: 'Crear',
         submenu: [{
-                label: 'Nuevo Producto',
+                label: 'Crear Insumos',
                 accelerator: 'Ctrl+N', //Atajo 
                 click() {
-                    createNewProductWindows();
+                    createInsumosWindows();
                 }
             },
             {
-                label: 'Eliminar Producto',
+                label: 'Crear Proveedores',
                 accelerator: 'Ctrl+P', //Atajo 
                 click() {
-                    DeleteProductsWindows();
+
                 }
+            },
+            {
+                label: 'Crear Tipos de Proveedores',
+                accelerator: 'Ctrl+P', //Atajo 
+                click() {
+
+                }
+            },
+            {
+                label: 'Crear Partes',
+                accelerator: 'Ctrl+P', //Atajo 
+                click() {
+
+                }
+            },
+            {
+                label: 'Crear Productos',
+                accelerator: 'Ctrl+P', //Atajo 
+                click() {
+
+                }
+            }
+        ]
+    },
+    {
+        label: 'Vistas',
+        submenu: [{
+                label: 'Insumos',
+            },
+            {
+                label: 'Proveedores',
+            },
+            {
+                label: 'Tipos de Proveedores',
+            },
+            {
+                label: 'Partes',
+            },
+            {
+                label: 'Productos',
             }
         ]
     },
