@@ -63,14 +63,6 @@
 
 
             // Se crea un objeto con los valores
-<<<<<<< HEAD
-            const newProduct = {
-                name: nameInsumo,
-                fecha: fecha,
-                priceCm: priceProductCm2,
-                priceCmu: priceProductUnidad
-            };
-=======
             // const newProduct = {
             //     name: nameInsumo,
             //     providerName: proveedor,
@@ -81,7 +73,6 @@
 
             const newProduct = new Insumo(0, nameInsumo, proveedor, fecha, priceProductCm2, priceProductUnidad);
 
->>>>>>> Agregue carpeta controllers, models y el archivo database.js
             console.log(newProduct);
             // a traves de  ipcRenderer.send voy a enviar un evento llamada product:new y un objeto al index.js
             // Se envía el objeto {newProduct} como 'product:new' al Main para ser mostrados en la pantalla principal

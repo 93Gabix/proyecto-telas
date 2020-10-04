@@ -58,18 +58,10 @@
             listadoInsumos.forEach(insumo => {
                 products.innerHTML += `
                     <tr>
-<<<<<<< HEAD
                         <td>${newProduct.name}</td>
                         <td>${newProduct.fecha}</td>
                         <td>${newProduct.priceCm}</td>
                         <td>${newProduct.priceCmu}</td>
-=======
-                        <td>${insumo.name}</td>
-                        <td>${insumo.providerName}</td>
-                        <td>${insumo.date}</td>
-                        <td>${insumo.priceCm}</td>
-                        <td>${insumo.priceCmUnit}</td>
->>>>>>> Agregue carpeta controllers, models y el archivo database.js
                         <td> 
                             <button class="btn btn-danger btn-sm" onclick="Eliminar('${insumo.id}')">
                                 Eliminar
@@ -79,47 +71,17 @@
                             </button>
                         </td>
                     </tr>
-<<<<<<< HEAD
-                </tbody>
-            </table>
-            `;
-            products.innerHTML += newProductTemplate; //Mostrar el objeto en html
-            const btns = document.querySelectorAll('.btn.btn-danger'); //Selecciona todos los btn que tengan esa clase
-            btns.forEach(btn => {
-                btn.addEventListener('click', event => {
-                    event.target.parentElement.parentElement.parentElement.parentElement.remove();
-                })
-            })
-
-        })
-=======
                 `;
-            });
-            // const newProductTemplate = `
-            //     <tr>
-            //         <td>${newProduct.name}</td>
-            //         <td>${newProduct.providerName}</td>
-            //         <td>${newProduct.date}</td>
-            //         <td>${newProduct.priceCm}</td>
-            //         <td>${newProduct.priceCmUnit}</td>
-            //         <td> 
-            //             <button class="btn btn-danger btn-sm" onclick="Eliminar(event)">
-            //                 Eliminar
-            //             </button>
-            //         </td>
-            //     </tr>
-            // `;
-            // products.innerHTML += newProductTemplate; //Mostrar el objeto en html
-            // const btns = document.querySelectorAll('.btn.btn-danger'); //Selecciona todos los btn que tengan esa clase
-            // btns.forEach(btn => {
-            //     btn.addEventListener('click', event => {
-            //         event.target.parentElement.parentElement.parentElement.parentElement.remove();
-            //     })
-            // })
+           
+                // const btns = document.querySelectorAll('.btn.btn-danger'); //Selecciona todos los btn que tengan esa clase
+                // btns.forEach(btn => {
+                //     btn.addEventListener('click', event => {
+                //         event.target.parentElement.parentElement.parentElement.parentElement.remove();
+                //     })
+                // })
 
-                
+            });
         });
->>>>>>> Agregue carpeta controllers, models y el archivo database.js
     </script>
 
 </body>
