@@ -10,12 +10,54 @@ if (process.env.NODE_ENV !== 'production') { //Para saber en que parte del desar
     })
 }
 
-// Pantalla principal
+// Pantalla de Inicio
+let ViweHome
+    // Pantalla principal
 let mainWindow
     // Pantalla de crear producto
 let newProductWindow
-    // Pantalla de eliminar producto
-let DeleteProductWindow
+
+
+
+
+// app.on('ready', () => {
+//     ViweHome = new BrowserWindow({
+//         webPreferences: {
+//             nodeIntegration: true,
+//             nodeIntegrationInWorker: true
+//         }
+//     })
+//     ViweHome.loadURL(url.format({
+//         pathname: path.join(__dirname, 'view/indexprincipal.html'), //indicar donde la ruta del archivo a cargar en esta ventana
+//         protocol: 'file', //Indica el protocolo
+//         slashes: true, //
+//     }))
+
+//     //Cuando la ventana principal se cierre, se cerrará la app
+//     mainWindow.on('closed', () => {
+//         app.quit();
+//     })
+//     const mainMenu = Menu.buildFromTemplate(templateMenu) //Crea un menú a partir de un arreglo que diseñemos(la navegacion)
+//         //Se guarda en una const, para luego aplicarselo al setApplicationMenu
+//     Menu.setApplicationMenu(mainMenu)
+// })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Esto se inicia al estar 'ready', con el path busca la carpeta src y ejecuta el index.html como pantalla principal
@@ -63,26 +105,6 @@ function createInsumosWindows() {
 
 }
 
-// function DeleteProductsWindows() {
-//     DeleteProductWindow = new BrowserWindow({
-//         width: 400,
-//         height: 330,
-//         title: 'Eliminar Productos',
-//         webPreferences: {
-//             nodeIntegration: true,
-//             nodeIntegrationInWorker: true
-//         }
-//     });
-//     //DeleteProductWindow.setMenu(null);
-//     DeleteProductWindow.loadURL(url.format({
-//         pathname: path.join(__dirname, 'view/list-product.html'),
-//         protocol: 'file',
-//         slashes: true,
-//     }))
-// }
-
-
-
 // Obtenemos los datos de new-product.html y los enviamos al index.html
 
 ipcMain.on('product:new', (event, newProduct) => {
@@ -108,14 +130,7 @@ const templateMenu = [
                 }
             },
             {
-                label: 'Crear Proveedores',
-                accelerator: 'Ctrl+P', //Atajo 
-                click() {
-
-                }
-            },
-            {
-                label: 'Crear Tipos de Proveedores',
+                label: 'Crear Productos',
                 accelerator: 'Ctrl+P', //Atajo 
                 click() {
 
@@ -123,13 +138,6 @@ const templateMenu = [
             },
             {
                 label: 'Crear Partes',
-                accelerator: 'Ctrl+P', //Atajo 
-                click() {
-
-                }
-            },
-            {
-                label: 'Crear Productos',
                 accelerator: 'Ctrl+P', //Atajo 
                 click() {
 
@@ -143,17 +151,12 @@ const templateMenu = [
                 label: 'Insumos',
             },
             {
-                label: 'Proveedores',
-            },
-            {
-                label: 'Tipos de Proveedores',
+                label: 'Productos',
             },
             {
                 label: 'Partes',
             },
-            {
-                label: 'Productos',
-            }
+
         ]
     },
     {
