@@ -17,19 +17,6 @@
     <div class="container p-4">
         <!-- Centra el contenido -->
         <div class="row" id="products">
-
-        </div>
-    </div>
-
-    <script>
-        const {
-            ipcRenderer
-        } = require('electron')
-        const products = document.querySelector('#products')
-
-
-        ipcRenderer.on('product:new', (event, newProduct) => {
-            const newProductTemplate = `
             <table class="table">
                 <thead class="thead-dark">
                     <tr>
@@ -40,18 +27,59 @@
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="productsBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    
+
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            ipcRenderer.send('product:getAllInsumos');
+        })
+
+        function Editar(id) {
+            ipcRenderer.send('product:edit', id);
+        }
+
+        function Eliminar(id) {
+            ipcRenderer.send('product:delete', id);
+        }
+
+        ipcRenderer.on('product:getInsumos', (event, listadoInsumos) => {
+            const products = document.querySelector('#productsBody');
+
+            products.innerHTML = '';
+            console.log(listadoInsumos);
+            
+            listadoInsumos.forEach(insumo => {
+                products.innerHTML += `
                     <tr>
+<<<<<<< HEAD
                         <td>${newProduct.name}</td>
                         <td>${newProduct.fecha}</td>
                         <td>${newProduct.priceCm}</td>
                         <td>${newProduct.priceCmu}</td>
+=======
+                        <td>${insumo.name}</td>
+                        <td>${insumo.providerName}</td>
+                        <td>${insumo.date}</td>
+                        <td>${insumo.priceCm}</td>
+                        <td>${insumo.priceCmUnit}</td>
+>>>>>>> Agregue carpeta controllers, models y el archivo database.js
                         <td> 
-                            <button class="btn btn-danger btn-sm">
+                            <button class="btn btn-danger btn-sm" onclick="Eliminar('${insumo.id}')">
                                 Eliminar
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="Editar('${insumo.id}')">
+                                Editar
                             </button>
                         </td>
                     </tr>
+<<<<<<< HEAD
                 </tbody>
             </table>
             `;
@@ -64,6 +92,34 @@
             })
 
         })
+=======
+                `;
+            });
+            // const newProductTemplate = `
+            //     <tr>
+            //         <td>${newProduct.name}</td>
+            //         <td>${newProduct.providerName}</td>
+            //         <td>${newProduct.date}</td>
+            //         <td>${newProduct.priceCm}</td>
+            //         <td>${newProduct.priceCmUnit}</td>
+            //         <td> 
+            //             <button class="btn btn-danger btn-sm" onclick="Eliminar(event)">
+            //                 Eliminar
+            //             </button>
+            //         </td>
+            //     </tr>
+            // `;
+            // products.innerHTML += newProductTemplate; //Mostrar el objeto en html
+            // const btns = document.querySelectorAll('.btn.btn-danger'); //Selecciona todos los btn que tengan esa clase
+            // btns.forEach(btn => {
+            //     btn.addEventListener('click', event => {
+            //         event.target.parentElement.parentElement.parentElement.parentElement.remove();
+            //     })
+            // })
+
+                
+        });
+>>>>>>> Agregue carpeta controllers, models y el archivo database.js
     </script>
 
 </body>

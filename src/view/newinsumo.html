@@ -36,9 +36,17 @@
         //Protocolo que usa electron para comunicar las ventanas con la principal
         // Se necesita del ipcRenderer para pasar la informacion al Main con 'send()'
 
-        const {
-            ipcRenderer
-        } = require('electron');
+        const { ipcRenderer } = require('electron');
+        const { Insumo } = require('../models/insumo');
+
+        ipcRenderer.on('product:getInsumo',  (event, insumo) => {
+            console.log(event, insumo)
+            document.querySelector('#name').value = insumo.name;
+            document.querySelector('#nameProv').value = insumo.providerName;
+            document.querySelector('#fecha').value = insumo.date;
+            document.querySelector('#priceCm').value = insumo.priceCm;
+            document.querySelector('#priceCmu').value = insumo.priceCmUnit;
+        });
 
 
         //Al momento de guardar producto no se recarga la pestaña
@@ -55,18 +63,29 @@
 
 
             // Se crea un objeto con los valores
+<<<<<<< HEAD
             const newProduct = {
                 name: nameInsumo,
                 fecha: fecha,
                 priceCm: priceProductCm2,
                 priceCmu: priceProductUnidad
             };
+=======
+            // const newProduct = {
+            //     name: nameInsumo,
+            //     providerName: proveedor,
+            //     date: fecha,
+            //     priceCm: priceProductCm2,
+            //     priceCmUnit: priceProductUnidad
+            // };
+
+            const newProduct = new Insumo(0, nameInsumo, proveedor, fecha, priceProductCm2, priceProductUnidad);
+
+>>>>>>> Agregue carpeta controllers, models y el archivo database.js
             console.log(newProduct);
             // a traves de  ipcRenderer.send voy a enviar un evento llamada product:new y un objeto al index.js
             // Se envía el objeto {newProduct} como 'product:new' al Main para ser mostrados en la pantalla principal
             ipcRenderer.send('product:new', newProduct);
-
-
         });
     </script>
 

@@ -1,8 +1,12 @@
-const { app, BrowserWindow, Menu, ipcMain } = require('electron')
-
+const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 
 const path = require('path')
 const url = require('url')
+
+const { createConnection } = require('./database');
+createConnection();
+
+const { getInsumos, getInsumo, createInsumo, updateInsumo, deleteInsumo } = require('./controllers/InsumosController');
 
 if (process.env.NODE_ENV !== 'production') { //Para saber en que parte del desarrollo estamos
     require('electron-reload')(__dirname, {
@@ -74,32 +78,33 @@ app.on('ready', () => {
         slashes: true, //
     }))
 
-    //Cuando la ventana principal se cierre, se cerrará la app
+    
     mainWindow.on('closed', () => {
         app.quit();
     })
     const mainMenu = Menu.buildFromTemplate(templateMenu) //Crea un menú a partir de un arreglo que diseñemos(la navegacion)
-        //Se guarda en una const, para luego aplicarselo al setApplicationMenu
+    //Se guarda en una const, para luego aplicarselo al setApplicationMenu
     Menu.setApplicationMenu(mainMenu)
 })
 
 
 //se encarga de crear una nueva interfaz para crear un formulario para crear nuevo producto
-function createInsumosWindows() {
+function createInsumosWindows(title) {
     newProductWindow = new BrowserWindow({
         width: 400,
-        height: 350,
-        title: 'Agregar Nuevo Insumo',
+        height: 450,
+        title: title,
         webPreferences: {
             nodeIntegration: true,
             nodeIntegrationInWorker: true
         }
-    })
+    });
+
     newProductWindow.loadURL(url.format({
-            pathname: path.join(__dirname, 'view/newinsumo.html'),
-            protocol: 'file',
-            slashes: true,
-        }))
+        pathname: pathName = path.join(__dirname, 'view/newinsumo.html'),
+        protocol: 'file',
+        slashes: true,
+    }));
         // para que no aparezca el mimso nav que la pantalla principal // Se comenta por el momento para desarrollar
         //newProductWindow.setMenu(null)
 
@@ -110,10 +115,43 @@ function createInsumosWindows() {
 ipcMain.on('product:new', (event, newProduct) => {
     //podemos chequear que los valores son los correctos en la consola del visual
     //console.log(newProduct);
-    // Se envía por mainWindow con webContents los datos obtenidos y luego cerramos la pantalla newProductWindow 
-    mainWindow.webContents.send('product:new', newProduct);
+    // Se envía por mainWindow con webContents los datos obtenidos y luego cerramos la pantalla newProductWindow
+    // const { name, nameProv, fecha, priceCm, priceCmu } = newProduct;
+
+    // db.addInsumo(newProduct);
+
+    // mainWindow.webContents.send('product:new', newProduct);
+
+    createInsumo(newProduct);
+    getInsumos(mainWindow);
+
     newProductWindow.close();
-})
+});
+
+ipcMain.on('product:edit', async (event, id) => {
+    const insumo = getInsumo(id);
+    createInsumosWindows('Editar Insumo', insumo);
+    setTimeout(() => {
+        newProductWindow.webContents.send('product:getInsumo', insumo)
+    }, 300);
+    
+});
+
+ipcMain.on('product:update', (event, insumoUpdated) => {
+    updateInsumo(insumoUpdated);
+    getInsumos(mainWindow);
+
+    newProductWindow.close();
+});
+
+ipcMain.on('product:delete', (event, id) => {
+    deleteInsumo(id);
+    getInsumos(mainWindow);
+});
+
+ipcMain.on('product:getAllInsumos', (event) => {
+    getInsumos(mainWindow);
+});
 
 
 
@@ -126,7 +164,7 @@ const templateMenu = [
                 label: 'Crear Insumos',
                 accelerator: 'Ctrl+N', //Atajo 
                 click() {
-                    createInsumosWindows();
+                    createInsumosWindows('Crear Nuevo Insumo');
                 }
             },
             {
@@ -182,3 +220,4 @@ if (process.env.NODE_ENV !== 'production') {
         }]
     })
 }
+
