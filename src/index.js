@@ -67,6 +67,9 @@ let newProductWindow
 // Esto se inicia al estar 'ready', con el path busca la carpeta src y ejecuta el index.html como pantalla principal
 app.on('ready', () => {
     mainWindow = new BrowserWindow({
+        width: 800,
+        height: 500,
+        title: 'Telas',
         webPreferences: {
             nodeIntegration: true,
             nodeIntegrationInWorker: true
@@ -93,6 +96,12 @@ function createInsumosWindows(title) {
     newProductWindow = new BrowserWindow({
         width: 400,
         height: 450,
+        minWidth: 400,
+        minHeight: 450,
+        maxWidth: 400,
+        maxHeight: 450,
+        minimizable: false,
+        frame: false,
         title: title,
         webPreferences: {
             nodeIntegration: true,
@@ -127,6 +136,11 @@ ipcMain.on('product:new', (event, newProduct) => {
 
     newProductWindow.close();
 });
+
+ipcMain.on('product:create', async (event) => {
+    createInsumosWindows('Crear Insumo');
+});
+
 
 ipcMain.on('product:edit', async (event, id) => {
     const insumo = getInsumo(id);

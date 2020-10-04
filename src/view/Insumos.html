@@ -24,7 +24,9 @@
                         <th scope="col">Fecha</th>
                         <th scope="col">$CM2</th>
                         <th scope="col">$/U</th>
-                        <th scope="col">Acciones</th>
+                        <th scope="col">
+                            <button onclick="Agregar()" class="btn btn-sm btn-block btn-success text-center">Agregar</button>
+                        </th>
                     </tr>
                 </thead>
                 <tbody id="productsBody"></tbody>
@@ -40,6 +42,10 @@
         document.addEventListener('DOMContentLoaded', () => {
             ipcRenderer.send('product:getAllInsumos');
         })
+
+        function Agregar() {
+            ipcRenderer.send('product:create');
+        }
 
         function Editar(id) {
             ipcRenderer.send('product:edit', id);
@@ -58,17 +64,19 @@
             listadoInsumos.forEach(insumo => {
                 products.innerHTML += `
                     <tr>
-                        <td>${newProduct.name}</td>
-                        <td>${newProduct.fecha}</td>
-                        <td>${newProduct.priceCm}</td>
-                        <td>${newProduct.priceCmu}</td>
-                        <td> 
-                            <button class="btn btn-danger btn-sm" onclick="Eliminar('${insumo.id}')">
-                                Eliminar
-                            </button>
-                            <button class="btn btn-danger btn-sm" onclick="Editar('${insumo.id}')">
-                                Editar
-                            </button>
+                        <td>${insumo.name}</td>
+                        <td>${insumo.date}</td>
+                        <td>${insumo.priceCm}</td>
+                        <td>${insumo.priceCmUnit}</td>
+                        <td>
+                            <div class="btn-group d-block" role="group">
+                                <button type="button" class="btn btn-info btn-sm" onclick="Editar('${insumo.id}')">
+                                    Editar
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="Eliminar('${insumo.id}')">
+                                    Eliminar
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 `;

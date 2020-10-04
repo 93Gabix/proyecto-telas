@@ -14,6 +14,7 @@
 <body>
 
     <form class="p-4">
+        <input type="hidden" id="insumoId" value="0">
         <div class="form-group">
             <input type="text" id="name" class="form-control" placeholder="Nombre del Insumo" autofocus>
         </div>
@@ -26,8 +27,16 @@
         <div class="form-group">
             <input type="number" id="priceCmu" class="form-control" placeholder="Precio por unidad" autofocus>
         </div>
-        <button class="btn btn-primary btn-block">
-            Guardar Insumo
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-danger">
+                Cancelar
+            </button>
+            <button type="button" class="btn btn-success">
+                Guardar
+            </button>
+        </div>
+        <button class="btn btn-success btn-block">
+            Guardar
         </button>
     </form>
 
@@ -41,6 +50,7 @@
 
         ipcRenderer.on('product:getInsumo',  (event, insumo) => {
             console.log(event, insumo)
+            document.querySelector('#insumoId').value = insumo.id;
             document.querySelector('#name').value = insumo.name;
             document.querySelector('#nameProv').value = insumo.providerName;
             document.querySelector('#fecha').value = insumo.date;
@@ -56,6 +66,7 @@
 
 
             // Se toma los values de los input
+            const insumoId = document.querySelector('#insumoId').value;
             const nameInsumo = document.querySelector('#name').value;
             const fecha = document.querySelector('#fecha').value;
             const priceProductCm2 = document.querySelector('#priceCm').value;
@@ -71,12 +82,16 @@
             //     priceCmUnit: priceProductUnidad
             // };
 
-            const newProduct = new Insumo(0, nameInsumo, proveedor, fecha, priceProductCm2, priceProductUnidad);
+            const newProduct = new Insumo(insumoId, nameInsumo, fecha, priceProductCm2, priceProductUnidad);
 
             console.log(newProduct);
             // a traves de  ipcRenderer.send voy a enviar un evento llamada product:new y un objeto al index.js
             // Se envía el objeto {newProduct} como 'product:new' al Main para ser mostrados en la pantalla principal
-            ipcRenderer.send('product:new', newProduct);
+            if(document.querySelector('#insumoId').value === '0') {
+                ipcRenderer.send('product:new', newProduct);
+            } else {
+                ipcRenderer.send('product:update', newProduct);
+            }
         });
     </script>
 
