@@ -4,7 +4,7 @@ const FileSync = require('lowdb/adapters/FileSync');
 let db;
 
 function createConnection() {
-    const adapter = new FileSync('db/db.json');
+    const adapter = new FileSync('db.json');
     db = low(adapter);
     db.defaults({ insumos: [] }).write();
 }

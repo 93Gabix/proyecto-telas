@@ -14,16 +14,16 @@ const getInsumo = (insumoId) => {
 }
 
 const createInsumo = (insumo) => {
-    const { name, providerName, date, priceCm, priceCmUnit } = insumo;
+    const { name, date, priceCm, priceCmUnit } = insumo;
     const id = v4();
 
-    const newInsumo = new Insumo(id, name, providerName, date, priceCm, priceCmUnit);
+    const newInsumo = new Insumo(id, name, date, priceCm, priceCmUnit);
 
     getConnection().get('insumos').push(newInsumo).write();
 }
 
 const updateInsumo = (insumoUpdated) => {
-    getConnection().get('insumos').find({ id: insumoId }).assign(insumoUpdated).value();
+    getConnection().get('insumos').find({ id: insumoUpdated.id }).assign(insumoUpdated).value();
 }
 
 const deleteInsumo = (insumoId) => {

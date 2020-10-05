@@ -44,11 +44,11 @@
         })
 
         function Agregar() {
-            ipcRenderer.send('product:create');
+            ipcRenderer.send('product:open', '0');
         }
 
         function Editar(id) {
-            ipcRenderer.send('product:edit', id);
+            ipcRenderer.send('product:open', id);
         }
 
         function Eliminar(id) {
@@ -68,7 +68,7 @@
                         <td>${insumo.date}</td>
                         <td>${insumo.priceCm}</td>
                         <td>${insumo.priceCmUnit}</td>
-                        <td>
+                        <td class="text-center">
                             <div class="btn-group d-block" role="group">
                                 <button type="button" class="btn btn-info btn-sm" onclick="Editar('${insumo.id}')">
                                     Editar

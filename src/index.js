@@ -1,12 +1,13 @@
 const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 
+const { getInsumos, getInsumo, createInsumo, updateInsumo, deleteInsumo } = require('./controllers/InsumosController');
+
 const path = require('path')
 const url = require('url')
 
 const { createConnection } = require('./database');
 createConnection();
 
-const { getInsumos, getInsumo, createInsumo, updateInsumo, deleteInsumo } = require('./controllers/InsumosController');
 
 if (process.env.NODE_ENV !== 'production') { //Para saber en que parte del desarrollo estamos
     require('electron-reload')(__dirname, {
@@ -19,7 +20,7 @@ let ViweHome
     // Pantalla principal
 let mainWindow
     // Pantalla de crear producto
-let newProductWindow
+let newProductWindow;
 
 
 
@@ -46,24 +47,6 @@ let newProductWindow
 //     Menu.setApplicationMenu(mainMenu)
 // })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Esto se inicia al estar 'ready', con el path busca la carpeta src y ejecuta el index.html como pantalla principal
 app.on('ready', () => {
     mainWindow = new BrowserWindow({
@@ -88,11 +71,10 @@ app.on('ready', () => {
     const mainMenu = Menu.buildFromTemplate(templateMenu) //Crea un menú a partir de un arreglo que diseñemos(la navegacion)
     //Se guarda en una const, para luego aplicarselo al setApplicationMenu
     Menu.setApplicationMenu(mainMenu)
-})
+});
 
 
-//se encarga de crear una nueva interfaz para crear un formulario para crear nuevo producto
-function createInsumosWindows(title) {
+function createInsumosWindows(title = '') {
     newProductWindow = new BrowserWindow({
         width: 400,
         height: 450,
@@ -101,7 +83,7 @@ function createInsumosWindows(title) {
         maxWidth: 400,
         maxHeight: 450,
         minimizable: false,
-        frame: false,
+        // frame: false,
         title: title,
         webPreferences: {
             nodeIntegration: true,
@@ -119,9 +101,28 @@ function createInsumosWindows(title) {
 
 }
 
-// Obtenemos los datos de new-product.html y los enviamos al index.html
 
-ipcMain.on('product:new', (event, newProduct) => {
+
+//Abrir la ventana para crear un nuevo insumo
+ipcMain.on('product:open', async (event, id) => {
+
+    if(id !== '0') {
+        const insumo = getInsumo(id);
+        createInsumosWindows('Editar Insumo', insumo);
+        setTimeout(() => {
+            newProductWindow.webContents.send('product:getInsumo', insumo)
+        }, 300);
+    } else {
+        createInsumosWindows('Crear Insumo');
+    }
+});
+
+//Cerrar la ventana de Insumos
+ipcMain.on('product:close', async (event) => {
+    newProductWindow.close();
+});
+
+ipcMain.on('product:new', (event, newInsumo) => {
     //podemos chequear que los valores son los correctos en la consola del visual
     //console.log(newProduct);
     // Se envía por mainWindow con webContents los datos obtenidos y luego cerramos la pantalla newProductWindow
@@ -131,26 +132,23 @@ ipcMain.on('product:new', (event, newProduct) => {
 
     // mainWindow.webContents.send('product:new', newProduct);
 
-    createInsumo(newProduct);
+    createInsumo(newInsumo);
     getInsumos(mainWindow);
 
     newProductWindow.close();
 });
 
-ipcMain.on('product:create', async (event) => {
-    createInsumosWindows('Crear Insumo');
-});
-
-
-ipcMain.on('product:edit', async (event, id) => {
-    const insumo = getInsumo(id);
-    createInsumosWindows('Editar Insumo', insumo);
-    setTimeout(() => {
-        newProductWindow.webContents.send('product:getInsumo', insumo)
-    }, 300);
+//Abrir ventana para editar un insumo
+// ipcMain.on('product:edit', async (event, id) => {
+//     const insumo = getInsumo(id);
+//     createInsumosWindows('Editar Insumo', insumo);
+//     setTimeout(() => {
+//         newProductWindow.webContents.send('product:getInsumo', insumo)
+//     }, 300);
     
-});
+// });
 
+//Actualizar la información de un Insumo
 ipcMain.on('product:update', (event, insumoUpdated) => {
     updateInsumo(insumoUpdated);
     getInsumos(mainWindow);
@@ -158,15 +156,16 @@ ipcMain.on('product:update', (event, insumoUpdated) => {
     newProductWindow.close();
 });
 
+//Eliminar un Insumo
 ipcMain.on('product:delete', (event, id) => {
     deleteInsumo(id);
     getInsumos(mainWindow);
 });
 
+//Obtener todos los insumos para la vista principal
 ipcMain.on('product:getAllInsumos', (event) => {
     getInsumos(mainWindow);
 });
-
 
 
 //Arreglo creado
@@ -234,4 +233,3 @@ if (process.env.NODE_ENV !== 'production') {
         }]
     })
 }
-

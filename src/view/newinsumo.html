@@ -5,37 +5,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <meta http-equiv="Content-Security-Policy" content="script-src 'self'"> -->
-    <title>Agregar Insumos</title>
+    <!-- <title>Agregar Insumos</title> -->
     <link rel="stylesheet" href="https://bootswatch.com/4/flatly/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
+    <link rel="stylesheet" href="../styles/styles.css">
 </head>
 
 <body>
 
     <form class="p-4">
+        <div class="title__window d-flex align-items-center">
+
+            <a onclick="CerrarVentana()" class="btn p-0">
+                <svg width="1.7em" height="1.7em" viewBox="0 0 16 16" class="bi bi-arrow-left-square-fill" fill="#131313" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm9.5 8.5a.5.5 0 0 0 0-1H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5z"/>
+                </svg>
+            </a>
+    
+            <h3 id="titulo" class="d-inline-block">Crear Insumo</h3>
+    
+        </div>
         <input type="hidden" id="insumoId" value="0">
         <div class="form-group">
-            <input type="text" id="name" class="form-control" placeholder="Nombre del Insumo" autofocus>
+            <input type="text" id="name" class="form-control" value="" placeholder="Nombre del Insumo" autofocus>
         </div>
         <div class="form-group">
-            <input type="datetime" id="fecha" class="form-control" placeholder="Fecha" autofocus>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-calendar-week-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4V.5zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2zM9.5 7a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zM2 10.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1z"/>
+                        </svg>
+                    </span>
+                </div>
+                <input type="text" id="fecha" class="form-control" value="" placeholder="Fecha" autofocus>
+            </div>            
+        </div>
+        <div class="form-group row">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">$</span>
+                </div>
+                <input type="text" id="priceCm" class="form-control" value="" placeholder="Precio CM2" autofocus>
+            </div>
         </div>
         <div class="form-group">
-            <input type="number" id="priceCm" class="form-control" placeholder="Precio CM2" autofocus>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">$</span>
+                </div>
+                <input type="text" id="priceCmu" class="form-control" value="" placeholder="Precio por unidad" autofocus>
+            </div>
         </div>
-        <div class="form-group">
-            <input type="number" id="priceCmu" class="form-control" placeholder="Precio por unidad" autofocus>
-        </div>
-        <div class="btn-group" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-danger">
-                Cancelar
-            </button>
-            <button type="button" class="btn btn-success">
-                Guardar
-            </button>
-        </div>
-        <button class="btn btn-success btn-block">
+        <button type="submit" type="button" class="btn btn-success btn-block">
             Guardar
         </button>
     </form>
@@ -48,11 +71,19 @@
         const { ipcRenderer } = require('electron');
         const { Insumo } = require('../models/insumo');
 
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if(document.querySelector('#insumoId').value === '0') {
+                document.querySelector('.title__window #titulo').value = 'Crear Insumo'
+            } else {
+                document.querySelector('.title__window #titulo').value = 'Editar Insumo'
+            }
+        });
+
         ipcRenderer.on('product:getInsumo',  (event, insumo) => {
             console.log(event, insumo)
             document.querySelector('#insumoId').value = insumo.id;
             document.querySelector('#name').value = insumo.name;
-            document.querySelector('#nameProv').value = insumo.providerName;
             document.querySelector('#fecha').value = insumo.date;
             document.querySelector('#priceCm').value = insumo.priceCm;
             document.querySelector('#priceCmu').value = insumo.priceCmUnit;
@@ -82,17 +113,22 @@
             //     priceCmUnit: priceProductUnidad
             // };
 
-            const newProduct = new Insumo(insumoId, nameInsumo, fecha, priceProductCm2, priceProductUnidad);
+            const newInsumo = new Insumo(insumoId, nameInsumo, fecha, priceProductCm2, priceProductUnidad);
 
-            console.log(newProduct);
+            console.log(newInsumo);
             // a traves de  ipcRenderer.send voy a enviar un evento llamada product:new y un objeto al index.js
             // Se envía el objeto {newProduct} como 'product:new' al Main para ser mostrados en la pantalla principal
             if(document.querySelector('#insumoId').value === '0') {
-                ipcRenderer.send('product:new', newProduct);
+                ipcRenderer.send('product:new', newInsumo);
             } else {
-                ipcRenderer.send('product:update', newProduct);
+                ipcRenderer.send('product:update', newInsumo);
             }
         });
+
+        function CerrarVentana() {
+            ipcRenderer.send('product:close');
+        }
+
     </script>
 
 </body>
