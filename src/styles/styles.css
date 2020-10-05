@@ -1,0 +1,14 @@
+.title__window {
+    background-color: #ccc;
+    margin-bottom: 1em;
+    padding: .2em .5em;
+    border-radius: .5em;
+
+}
+
+.title__window #titulo{
+    margin-left: 1em;
+    margin-left: auto;
+    margin-right: auto;
+
+}
