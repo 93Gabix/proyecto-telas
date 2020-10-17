@@ -1,3 +1,16 @@
+:root {
+    --color1: rgb(105,219,157);
+    --color2: rgb(105,173,219);
+    --color3: rgb(181,105,219);
+    --color4: rgb(201,68,79);
+    --color1Opacidad: rgba(105,219,157, .65);
+    --color2Opacidad: rgba(105,173,219, .65);
+    --color3Opacidad: rgba(181,105,219, .65);
+    --color4Opacidad: rgba(201,68,79, .65);
+
+    --borderRadius: .15em;
+}
+
 .title__window {
     background-color: #ccc;
     margin-bottom: 1em;
@@ -11,4 +24,57 @@
     margin-left: auto;
     margin-right: auto;
 
+}
+
+/* backgrounds */
+.bgcolor__c1 {
+    background-color: var(--color1);
+}
+.bgcolor__c2 {
+    background-color: var(--color2);
+}
+.bgcolor__c3 {
+    background-color: var(--color3);
+}
+.bgcolor__c4 {
+    background-color: var(--color4);
+}
+
+/* Bordes */
+.redondeo {
+    border-radius: var(--borderRadius);
+}
+
+/* Botones */
+.boton {
+    border-radius: var(--borderRadius);
+}
+.boton.c1 {
+    background-color: var(--color1);
+    border-color: var(--color1);
+    color: white;
+}
+.boton.c1:hover {
+    background-color: var(--color1Opacidad);
+    border-color: var(--color1Opacidad);
+}
+
+.boton.c1:focus, 
+.boton.c1:active {
+    box-shadow: 0 0 2px 2px var(--color1Opacidad);
+}
+
+.boton.c2 {
+    background-color: var(--color2);
+    border-color: var(--color2);
+    color: white;
+}
+.boton.c2:hover {
+    background-color: var(--color2Opacidad);
+    border-color: var(--color2Opacidad);
+}
+
+.boton.c2:focus, 
+.boton.c2:active {
+    box-shadow: 0 0 2px 2px var(--color2Opacidad);
 }
